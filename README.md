@@ -1,1 +1,3 @@
-# genius-garden
+# Genius Garden
+
+Genius Garden is an IoT application designed to help gardeners grow healthy and abundant plants. Using sensors and smart technology, Genius Garden monitors and automatically adjusts important factors such as watering, sunlight, and soil nutrients to ensure that your plants receive the optimal conditions for growth. With Genius Garden, you can easily keep track of your garden's progress and receive timely notifications and suggestions on how to improve its health. Whether you are a seasoned green thumb or a gardening novice, Genius Garden makes it easy to create and maintain a thriving garden.
