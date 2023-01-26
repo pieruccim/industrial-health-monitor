@@ -5,29 +5,40 @@ import org.eclipse.californium.core.CoapServer;
 import org.eclipse.californium.core.coap.CoAP.ResponseCode;
 import org.eclipse.californium.core.server.resources.CoapExchange;
 
-class CoAPResourceExample extends CoapResource {
-	public CoAPResourceExample(String name) {
-		super(name);
-		setObservable(true);
-	}
-	public void handleGET(CoapExchange exchange) {
-		exchange.respond("hello world");
-	}
-	public void handlePOST(CoapExchange exchange) {
-		/* your stuff */
-		exchange.respond(ResponseCode.CREATED);
-	}
-}
+import java.nio.charset.StandardCharsets;
+
 
 public class RegistrationServer extends CoapServer {
 
-	public static void main(String[] args) {
-		System.out.print("Running it!");
+    private final static CoapNetworkHandler coapHandler = CoapNetworkHandler.getInstance();
 
-		RegistrationServer server = new RegistrationServer();
-		server.add(new CoAPResourceExample("hello")); // the argument string is the path of this server
-		server.start();
+    public float checkTemperature() {
+        return coapHandler.checkTemperature();
+    }
 
-	}
+    class RegistrationResource extends CoapResource {
 
+        public RegistrationResource(String name) {
+            super("registration");
+        }
+
+        @Override
+        public void handlePOST(CoapExchange exchange) {
+
+            String deviceName = exchange.getRequestText();
+            String ipAddress = exchange.getSourceAddress().getHostAddress();
+
+            if (deviceName.equals("temperature_sensor")) {
+                coapHandler.addTemperatureSensor(ipAddress);
+            } else {
+
+            }
+            exchange.respond(ResponseCode.CREATED, "Devide registration completed!".getBytes(StandardCharsets.UTF_8));
+        }
+
+        @Override
+        public void handleDELETE(CoapExchange exchange) {
+            // TODO: write code to handle delete request
+        }
+    }
 }
