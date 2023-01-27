@@ -20,7 +20,6 @@ public class HealthDataCollector {
         System.out.println("Health Data Collector is running...");
 
         RegistrationServer rs = new RegistrationServer();
-        //rs.add(new RegistrationResource("hello")); // the argument string is the path of this server
         rs.start();
 
         // buffer to receive input from command line
@@ -41,7 +40,12 @@ public class HealthDataCollector {
                     printCommandList();
                 }
                 else if (tokens[0].equals("!checkTemp")){
-                    System.out.format("Current machine temperature is %f °C\n", rs.checkTemperature());
+                    float temp = rs.checkTemperature();
+                    if (temp == -1){
+                        System.out.println("Temperature sensor not registered!");
+                    } else{
+                        System.out.format("Current machine temperature is %f °C\n", temp);
+                    }
                 }
                 else if (tokens[0].equals("!exit")){
                     System.exit(1);

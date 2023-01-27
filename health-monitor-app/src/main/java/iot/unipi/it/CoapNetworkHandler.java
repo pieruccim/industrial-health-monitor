@@ -43,7 +43,8 @@ public class CoapNetworkHandler {
             CoapResponse res = clientTempSensor.get();
             return handleTemperatureResponse(res);
         }
-        return 0;
+        // temperature sensor has not been initialized yet
+        return -1;
     }
 
     private float handleTemperatureResponse(CoapResponse res) {
