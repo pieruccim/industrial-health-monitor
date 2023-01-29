@@ -71,7 +71,7 @@
 			<archive>
 				<manifest>
 					<addClasspath>true</addClasspath>
-					<mainClass>iot.unipi.it.RegistrationServer</mainClass>
+					<mainClass>iot.unipi.it.HealthDataCollector</mainClass>
 					<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 				</manifest>
 			</archive>
