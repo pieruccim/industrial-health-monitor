@@ -19,6 +19,7 @@ public class RegistrationServer extends CoapServer {
     class RegistrationResource extends CoapResource {
 
         public RegistrationResource(String name) {
+            // /registration is set as endpoint of Coap requests
             super("registration");
         }
 
@@ -33,7 +34,7 @@ public class RegistrationServer extends CoapServer {
             } else {
 
             }
-            exchange.respond(ResponseCode.CREATED, "Devide registration completed!".getBytes(StandardCharsets.UTF_8));
+            exchange.respond(ResponseCode.CREATED, "Device registration completed!".getBytes(StandardCharsets.UTF_8));
         }
 
         @Override
