@@ -1,5 +1,7 @@
 package iot.unipi.it;
 
+import java.net.SocketException;
+
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
 import org.eclipse.californium.core.coap.CoAP.ResponseCode;
@@ -12,14 +14,19 @@ public class RegistrationServer extends CoapServer {
 
     private final static CoapNetworkHandler coapHandler = CoapNetworkHandler.getInstance();
 
+    public RegistrationServer() throws SocketException {
+        // add registration resource to the server
+        this.add(new RegistrationResource());
+    }
+
     public float checkTemperature() {
         return coapHandler.checkTemperature();
     }
 
     class RegistrationResource extends CoapResource {
 
-        public RegistrationResource(String name) {
-            // /registration is set as endpoint of Coap requests
+        public RegistrationResource() {
+            // '/registration' is set as endpoint of Coap registration requests
             super("registration");
         }
 

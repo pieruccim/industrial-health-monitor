@@ -18,7 +18,7 @@
 #define LOG_LEVEL LOG_LEVEL_APP
 
 #define SERVER_EP "coap://[fd00::1]:5683"
-#define CONNECTION_TRY_INTERVAL 1
+#define CONNECTION_TRY_INTERVAL 2
 #define REGISTRATION_TRY_INTERVAL 1
 
 #define SENSOR_NAME "temperature_sensor"
@@ -31,7 +31,7 @@ static bool registered = false;
 static struct etimer wait_connection;
 static struct etimer wait_registration;
 
-char *registration_ep = "/registration";
+char *registration_ep = "/registration"; 
 
 static void check_router_reachable(){
     
@@ -43,7 +43,7 @@ static void check_router_reachable(){
     } else{
         
         LOG_INFO("Border router is reachable!\n");
-        leds_set(LEDS_NUM_TO_MASK(LEDS_BLUE));
+        leds_set(LEDS_NUM_TO_MASK(LEDS_LED2)); // yellow led on cooja
         connected = true;
 
     }   
@@ -53,13 +53,13 @@ void temp_chunck_handler(coap_message_t *response){
 
     if(response == NULL){
         LOG_INFO("Registration request timed out! \n");
-        etimer_set(&wait_connection, CLOCK_SECOND * REGISTRATION_TRY_INTERVAL);
+        etimer_set(&wait_registration, CLOCK_SECOND * REGISTRATION_TRY_INTERVAL);
         return;
     }
 
     const uint8_t *chunk;
     int len = coap_get_payload(response, &chunk);
-    printf("Registration response: %.*s", len, (char *) chunk);
+    LOG_INFO("Response received: %.*s\n", len, (char *)chunk);
 
     if( strcmp((char *) chunk, "Device registration completed!") == 0){
         leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
@@ -91,20 +91,21 @@ PROCESS_THREAD(temperature_server, ev, data){
     }
 
     
-    printf("Temperature sensor is now CONNECTED through border router!");
+    LOG_INFO("Temperature sensor is now CONNECTED through border router!\n");
 
     while (!registered)
     {
         /* send the registration request to registration server */
         
         coap_endpoint_parse( SERVER_EP, strlen(SERVER_EP), &server_ep); // bind endpoint variable to endpoint string
-
+        
         //prepare message to send
         coap_init_message( request, COAP_TYPE_CON, COAP_POST, 0);
         coap_set_header_uri_path(request, registration_ep);
         coap_set_payload(request, (uint8_t *)SENSOR_NAME, sizeof(SENSOR_NAME) - 1);
         
         // send blocking request, handle response on handler function
+        LOG_INFO("Blocking registration request is going to be sent...\n");
         COAP_BLOCKING_REQUEST(&server_ep, request, temp_chunck_handler);
 
         PROCESS_WAIT_UNTIL(etimer_expired(&wait_registration));
