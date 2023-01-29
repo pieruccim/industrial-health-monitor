@@ -1,1 +1,5 @@
 .idea/
+.vscode/
+coap-network/temperature/build/
+coap-network/temperature/
+health-monitor-app/target/
