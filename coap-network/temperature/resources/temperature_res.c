@@ -11,6 +11,9 @@ float temp_threshold = 90.0;
 //static void get_temp_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 //static void temp_event_handler();
 
+static void get_temp_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+static void temp_event_handler(void);
+
 static float simulate_temp_sensor(){
 
     float coeff = 1.5;
@@ -39,7 +42,7 @@ static void get_temp_handler(coap_message_t *request, coap_message_t *response, 
 
     /* converting temperature from float to string*/
     char payload[30];
-    sprintf(payload, "%g", temp_value);
+    sprintf(payload, "%.2f", temp_value);
 
     printf("payload: %s, length of payload: %d\n", payload, strlen(payload));
 
@@ -50,9 +53,9 @@ static void get_temp_handler(coap_message_t *request, coap_message_t *response, 
 static void temp_event_handler(void){
 
     float sensed_temp = simulate_temp_sensor();
-    printf("Sensed temperature: %f%cC\n", temp_value, 248);
+    printf("Sensed temperature: %.2f C\n", temp_value);
 
-    if (sensed_temp >= temp_threshold){
+    if (sensed_temp < temp_threshold){
         printf("Sensed temperature below threshold\n");
     } else{
         printf("DANGER: sensed temperature above threshold\n");

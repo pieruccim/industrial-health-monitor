@@ -21,8 +21,8 @@ public class CoapNetworkHandler {
 
     public void addTemperatureSensor(String ipAddress){
 
-        clientTempSensor = new CoapClient("coap://[" + ipAddress + "]/temperature-sensor");
-        System.out.println("Temperature sensor with ip-address [" + ipAddress + "] is now registered to the Coap net");
+        clientTempSensor = new CoapClient("coap://[" + ipAddress + "]/temperature_sensor");
+        System.out.println("Temperature sensor with ip-address [" + ipAddress + "] is now registered to the Coap net\n");
 
         observeSensor = clientTempSensor.observe(
                 new CoapHandler() {
@@ -48,7 +48,18 @@ public class CoapNetworkHandler {
     }
 
     private float handleTemperatureResponse(CoapResponse res) {
-        // TODO: handle the response of the get request depending on server sensor
-        return 0;
+        try {
+
+            // handle the response of the get request
+            String responseString = res.getResponseText();
+            float temp_value = Float.parseFloat(responseString);
+
+            return temp_value;
+
+        } catch (Exception e) {
+            System.err.println("Response received was not valid: " + e.getMessage() + "\n");
+            return 0;
+        }
+        
     }
 }
