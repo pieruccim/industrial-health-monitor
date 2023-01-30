@@ -20,6 +20,7 @@
 #define SERVER_EP "coap://[fd00::1]:5683"
 #define CONNECTION_TRY_INTERVAL 2
 #define REGISTRATION_TRY_INTERVAL 1
+#define SIMULATION_INTERVAL 1   
 
 #define SENSOR_NAME "temperature_sensor"
 
@@ -30,8 +31,10 @@ static bool registered = false;
 // timer to wait before connection and registration
 static struct etimer wait_connection;
 static struct etimer wait_registration;
+static struct etimer wait_simulation;
 
 char *registration_ep = "/registration"; 
+extern coap_resource_t temperature_sensor; // resource temperature_sensor in external file
 
 static void check_router_reachable(){
     
@@ -112,10 +115,26 @@ PROCESS_THREAD(temperature_server, ev, data){
     }
 
     LOG_INFO("Temperature sensor is now REGISTERED to registration server!\n");
-
     LOG_INFO("Starting temperature server...\n");
 
-    // activate the resource and 
+    // activate the resource (endpoint of the resource is '/temperature_sensor') and simulare sensor behavior
+    coap_activate_resource(&temperature_sensor, "temperature_sensor");
+
+    etimer_set( &wait_simulation, CLOCK_SECOND * SIMULATION_INTERVAL);
+
+    LOG_INFO("Starting sensor simulation \n");
+
+    while (1){
+        
+        PROCESS_WAIT_EVENT();
+
+        if(ev == PROCESS_EVENT_TIMER && data == &wait_simulation){	
+            /* resource event is triggered, then temp_event_handler is called */	  
+			temperature_sensor.trigger();
+            etimer_set( &wait_simulation, CLOCK_SECOND *SIMULATION_INTERVAL);
+		}
+    }
+    
 
     PROCESS_END();
 }
