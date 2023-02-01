@@ -5,6 +5,8 @@ import org.eclipse.californium.core.CoapHandler;
 import org.eclipse.californium.core.CoapObserveRelation;
 import org.eclipse.californium.core.CoapResponse;
 
+import org.json.JSONObject;
+
 public class CoapNetworkHandler {
     
     private CoapClient clientTempSensor;
@@ -50,9 +52,11 @@ public class CoapNetworkHandler {
     private float handleTemperatureResponse(CoapResponse res) {
         try {
 
-            // handle the response of the get request
+            // handle the response of the get request which has a JSON payload
             String responseString = res.getResponseText();
-            float temp_value = Float.parseFloat(responseString);
+
+            JSONObject responseJson = new JSONObject(responseString);
+            float temp_value = (float) responseJson.getDouble("temp");
 
             return temp_value;
 

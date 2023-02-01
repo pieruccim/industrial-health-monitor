@@ -42,7 +42,7 @@ static void get_temp_handler(coap_message_t *request, coap_message_t *response, 
 
     /* converting temperature from float to string*/
     char payload[30];
-    sprintf(payload, "%.2f", temp_value);
+    sprintf(payload, "{\"temp\":%.2f}", temp_value);
 
     printf("payload: %s, length of payload: %d\n", payload, strlen(payload));
 
