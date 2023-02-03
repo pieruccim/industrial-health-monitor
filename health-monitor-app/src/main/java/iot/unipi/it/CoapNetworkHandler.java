@@ -52,8 +52,10 @@ public class CoapNetworkHandler {
     private float handleTemperatureResponse(CoapResponse res) {
         try {
 
-            // handle the response of the get request which has a JSON payload
+            /* handle the response of the get request which has a JSON payload */
             String responseString = res.getResponseText();
+
+            System.out.println(responseString);
 
             JSONObject responseJson = new JSONObject(responseString);
             float temp_value = (float) responseJson.getDouble("temp");

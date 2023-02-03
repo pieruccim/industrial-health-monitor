@@ -34,6 +34,7 @@ static struct etimer wait_registration;
 static struct etimer wait_simulation;
 
 char *registration_ep = "/registration"; 
+char payload [50];
 extern coap_resource_t temperature_sensor; // resource temperature_sensor in external file
 
 static void check_router_reachable(){
@@ -64,7 +65,7 @@ void temp_chunck_handler(coap_message_t *response){
     int len = coap_get_payload(response, &chunk);
     LOG_INFO("Response received: %.*s\n", len, (char *)chunk);
 
-    if( strcmp((char *) chunk, "Device registration completed!") == 0){
+    if( strcmp((char *) chunk, "reg_completed") == 0){
         leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
         registered = true;
     } else{
@@ -105,10 +106,12 @@ PROCESS_THREAD(temperature_server, ev, data){
         //prepare message to send
         coap_init_message( request, COAP_TYPE_CON, COAP_POST, 0);
         coap_set_header_uri_path(request, registration_ep);
-        coap_set_payload(request, (uint8_t *)SENSOR_NAME, sizeof(SENSOR_NAME) - 1);
+
+        sprintf(payload, "{\"device\":\"%s\"}", (char *)SENSOR_NAME);
+        coap_set_payload(request, payload, strlen(payload));
         
         // send blocking request, handle response on handler function
-        LOG_INFO("Blocking registration request is going to be sent...\n");
+        LOG_INFO("Blocking registration request is going to be sent with payload: %s of size %i\n", payload, strlen(payload));
         COAP_BLOCKING_REQUEST(&server_ep, request, temp_chunck_handler);
 
         PROCESS_WAIT_UNTIL(etimer_expired(&wait_registration));
@@ -125,7 +128,7 @@ PROCESS_THREAD(temperature_server, ev, data){
     LOG_INFO("Starting sensor simulation \n");
 
     while (1){
-        
+
         PROCESS_WAIT_EVENT();
 
         if(ev == PROCESS_EVENT_TIMER && data == &wait_simulation){	

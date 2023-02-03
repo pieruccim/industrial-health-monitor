@@ -46,7 +46,7 @@ static void get_temp_handler(coap_message_t *request, coap_message_t *response, 
 
     printf("payload: %s, length of payload: %d\n", payload, strlen(payload));
 
-    coap_set_header_content_format(response, TEXT_PLAIN);
+    coap_set_header_content_format(response, APPLICATION_JSON);
     coap_set_payload(response, payload, strlen(payload));
 }
 
@@ -60,6 +60,6 @@ static void temp_event_handler(void){
     } else{
         printf("DANGER: sensed temperature above threshold\n");
         // when the temperature value rises above a certain threshold, notification is sent to observers
-        coap_notify_observers( &temperature_sensor);   
+        //coap_notify_observers( &temperature_sensor);   
     }
 }
