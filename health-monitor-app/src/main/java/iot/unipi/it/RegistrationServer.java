@@ -33,7 +33,9 @@ public class RegistrationServer extends CoapServer {
 
         @Override
         public void handlePOST(CoapExchange exchange) {
-            /* handle sensor add requests */
+            /* handle sensor add requests in format
+             * { "device": "temperature_sensor"}
+             */
             //System.out.println(exchange.getRequestText());
 
             JSONObject responseJson = null;
@@ -61,8 +63,34 @@ public class RegistrationServer extends CoapServer {
 
         @Override
         public void handleDELETE(CoapExchange exchange) {
-            // handle sensor delete requests
+            /* handle sensor delete requests in format
+             * { "device": "temperature_sensor"}
+            */
 
+            JSONObject responseJson;
+            String deviceName = "";
+            boolean success = false;
+
+            try {
+
+                responseJson = new JSONObject(exchange.getRequestText());
+                deviceName = responseJson.getString("device");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (deviceName.equals("temperature_sensor")) {
+                success = coapHandler.deleteTemperatureSensor();
+            } else {
+                /* other devices */
+            }
+            
+            if (success) {
+                exchange.respond(ResponseCode.DELETED, "dev_deleted".getBytes(StandardCharsets.UTF_8));
+            } else{
+                exchange.respond(ResponseCode.DELETED, "dev_not_deleted".getBytes(StandardCharsets.UTF_8));
+            }
         }
     }
 }

@@ -68,4 +68,12 @@ public class CoapNetworkHandler {
         }
         
     }
+
+    public boolean deleteTemperatureSensor() {
+        if (clientTempSensor == null) {
+            return false;
+        }
+        clientTempSensor = null;
+        return true;
+    }
 }
