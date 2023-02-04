@@ -4,10 +4,12 @@ import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapHandler;
 import org.eclipse.californium.core.CoapObserveRelation;
 import org.eclipse.californium.core.CoapResponse;
-
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.json.JSONObject;
 
 public class CoapNetworkHandler {
+
+    private float temp_threshold = 90;
     
     private CoapClient clientTempSensor;
     private CoapClient clientCoolerActuator;
@@ -23,6 +25,11 @@ public class CoapNetworkHandler {
     }
 
     public void addTemperatureSensor(String ipAddress){
+
+        if(clientTempSensor != null){
+            System.out.println("Temperature sensor already registered!\n");
+            return;
+        }
 
         clientTempSensor = new CoapClient("coap://[" + ipAddress + "]/temperature_sensor");
         System.out.println("Temperature sensor with ip-address [" + ipAddress + "] is now registered to the Coap net\n");
@@ -43,6 +50,11 @@ public class CoapNetworkHandler {
 
     public void addCoolerActuator(String ipAddress){
         
+        if(clientCoolerActuator != null){
+            System.out.println("Cooler actuator already registered!\n");
+            return;
+        }
+
         clientCoolerActuator = new CoapClient("coap://[" + ipAddress + "]/cooler_actuator");
         System.out.println("Cooler actuator with ip-address [" + ipAddress + "] is now registered to the Coap net\n");
     }
@@ -73,7 +85,7 @@ public class CoapNetworkHandler {
             if (res.getOptions().hasObserve()) {
                 /* notification received */
                 //System.out.format("\nNotification: temperature %.2f C need to be stored to DB\n", temp_value);
-                // TODO : save to DB the temperature notified
+                // TODO : save to DB the temperature notified and trigger actuator with a if condition
 
             } else{
                 /* response to the get request received */
@@ -86,8 +98,28 @@ public class CoapNetworkHandler {
         
     }
 
-    private void enableCoolerActuator(String respString){
-        // TODO
+    private void triggerCoolerActuator(String payload){
+        
+        if(clientCoolerActuator != null){
+
+            clientCoolerActuator.put(new CoapHandler() {
+                
+                public void onLoad(CoapResponse response) {
+                    if (response != null) {
+                        if(!response.isSuccess())
+                            System.out.println("Error with cooler actuator!\n");
+                    }
+                }
+
+                public void onError() {
+                    System.err.println("Error with cooler PUT request!\n");
+                }
+
+            }, payload, MediaTypeRegistry.TEXT_PLAIN);
+
+        } else{
+            System.out.println("There is no ripening notifier associated");
+        }
     }
 
     public boolean deleteTemperatureSensor() {
