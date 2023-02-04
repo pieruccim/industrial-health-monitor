@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "project-conf.h"
+#include "resources/temperature_res.c"
 
 #include "contiki.h"
 #include "sys/etimer.h"
@@ -23,6 +24,9 @@
 #define SIMULATION_INTERVAL 1   
 
 #define SENSOR_NAME "temperature_sensor"
+
+PROCESS(temperature_server, "Temperature sensor server");
+AUTOSTART_PROCESSES(&temperature_server);
 
 // variables to understand if the node is connected and registered
 static bool connected = false;
@@ -73,9 +77,6 @@ void temp_chunck_handler(coap_message_t *response){
     }
 
 }
-
-PROCESS(temperature_server, "Temperature sensor server");
-AUTOSTART_PROCESSES(&temperature_server);
 
 PROCESS_THREAD(temperature_server, ev, data){
 
@@ -132,8 +133,8 @@ PROCESS_THREAD(temperature_server, ev, data){
         PROCESS_WAIT_EVENT();
 
         if(ev == PROCESS_EVENT_TIMER && data == &wait_simulation){	
-            /* resource event is triggered, then temp_event_handler is called */	  
-			temperature_sensor.trigger();
+            /* simulation of temperature sensor */
+            simulate_temp_sensor();	  
             etimer_set( &wait_simulation, CLOCK_SECOND *SIMULATION_INTERVAL);
 		}
     }

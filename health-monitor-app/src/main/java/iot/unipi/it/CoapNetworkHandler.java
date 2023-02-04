@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class CoapNetworkHandler {
     
     private CoapClient clientTempSensor;
+    private CoapClient clientCoolerActuator;
     private CoapObserveRelation observeSensor;
     
     private static CoapNetworkHandler instance = null;
@@ -40,6 +41,12 @@ public class CoapNetworkHandler {
                 });
     }
 
+    public void addCoolerActuator(String ipAddress){
+        
+        clientCoolerActuator = new CoapClient("coap://[" + ipAddress + "]/cooler_actuator");
+        System.out.println("Cooler actuator with ip-address [" + ipAddress + "] is now registered to the Coap net\n");
+    }
+
     public float checkTemperature() {
         if (clientTempSensor != null){
             CoapResponse res = clientTempSensor.get();
@@ -52,10 +59,13 @@ public class CoapNetworkHandler {
     private float handleTemperatureResponse(CoapResponse res) {
         try {
 
-            /* handle the response of the get request which has a JSON payload */
+            /* handle the response of the get request which has a JSON payload
+             * { "temp": float}
+             */
             String responseString = res.getResponseText();
 
             System.out.println(responseString);
+            System.out.println(res.getOptions() + "\n");
 
             JSONObject responseJson = new JSONObject(responseString);
             float temp_value = (float) responseJson.getDouble("temp");
@@ -67,6 +77,10 @@ public class CoapNetworkHandler {
             return 0;
         }
         
+    }
+
+    private void enableCoolerActuator(String respString){
+        // TODO
     }
 
     public boolean deleteTemperatureSensor() {

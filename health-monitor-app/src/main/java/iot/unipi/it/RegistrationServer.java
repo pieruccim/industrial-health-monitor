@@ -39,25 +39,23 @@ public class RegistrationServer extends CoapServer {
             //System.out.println(exchange.getRequestText());
 
             JSONObject responseJson = null;
+            String deviceName = "";
+
             try {
                 responseJson = new JSONObject(exchange.getRequestText());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            String deviceName = "";
-            try {
                 deviceName = responseJson.getString("device");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             String ipAddress = exchange.getSourceAddress().getHostAddress();
 
             if (deviceName.equals("temperature_sensor")) {
                 coapHandler.addTemperatureSensor(ipAddress);
-            } else {
-
+            } else if(deviceName.equals("cooler_actuator")){
+                coapHandler.addCoolerActuator(ipAddress);
             }
+            
             exchange.respond(ResponseCode.CREATED, "reg_completed".getBytes(StandardCharsets.UTF_8));
         }
 
