@@ -38,17 +38,15 @@ public class HealthDataCollector {
                 tokens = command.split(" ");
 
                 if (tokens[0].equals("!help")){
+
                     printCommandList();
                 }
                 else if (tokens[0].equals("!checkTemp")){
-                    float temp = rs.checkTemperature();
-                    if (temp == -1){
-                        System.out.println("Temperature sensor not registered!\n");
-                    } else{
-                        System.out.format("Current machine temperature is %.2f C\n", temp);
-                    }
+
+                    rs.checkTemperature();
                 }
                 else if (tokens[0].equals("!exit")){
+                    
                     System.exit(1);
                 } else {
                     throw new IOException();

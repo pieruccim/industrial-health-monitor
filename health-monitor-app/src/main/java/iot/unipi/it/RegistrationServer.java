@@ -20,8 +20,8 @@ public class RegistrationServer extends CoapServer {
         this.add(new RegistrationResource());
     }
 
-    public float checkTemperature() {
-        return coapHandler.checkTemperature();
+    public void checkTemperature() {
+        coapHandler.checkTemperature();
     }
 
     class RegistrationResource extends CoapResource {
@@ -55,7 +55,7 @@ public class RegistrationServer extends CoapServer {
             } else if(deviceName.equals("cooler_actuator")){
                 coapHandler.addCoolerActuator(ipAddress);
             }
-            
+
             exchange.respond(ResponseCode.CREATED, "reg_completed".getBytes(StandardCharsets.UTF_8));
         }
 

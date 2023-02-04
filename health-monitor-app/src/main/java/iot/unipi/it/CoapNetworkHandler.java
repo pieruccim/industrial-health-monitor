@@ -47,34 +47,41 @@ public class CoapNetworkHandler {
         System.out.println("Cooler actuator with ip-address [" + ipAddress + "] is now registered to the Coap net\n");
     }
 
-    public float checkTemperature() {
+    public void checkTemperature() {
         if (clientTempSensor != null){
             CoapResponse res = clientTempSensor.get();
-            return handleTemperatureResponse(res);
+            handleTemperatureResponse(res);
+        } else{
+            // temperature sensor has not been initialized yet
+            System.out.println("\nTemperature sensor not registered!\n");
         }
-        // temperature sensor has not been initialized yet
-        return -1;
     }
 
-    private float handleTemperatureResponse(CoapResponse res) {
+    private void handleTemperatureResponse(CoapResponse res) {
         try {
 
             /* handle the response of the get request which has a JSON payload
              * { "temp": float}
              */
-            String responseString = res.getResponseText();
 
-            System.out.println(responseString);
-            System.out.println(res.getOptions() + "\n");
+
+            String responseString = res.getResponseText();
 
             JSONObject responseJson = new JSONObject(responseString);
             float temp_value = (float) responseJson.getDouble("temp");
 
-            return temp_value;
+            if (res.getOptions().hasObserve()) {
+                /* notification received */
+                //System.out.format("\nNotification: temperature %.2f C need to be stored to DB\n", temp_value);
+                // TODO : save to DB the temperature notified
+
+            } else{
+                /* response to the get request received */
+                System.out.format("\nCurrent machine temperature is %.2f C\n", temp_value);
+            }
 
         } catch (Exception e) {
-            System.err.println("Response received was not valid: " + e.getMessage() + "\n");
-            return 0;
+            System.err.println("Response received was not valid: " + e.getMessage() + "\n");;
         }
         
     }
