@@ -24,6 +24,20 @@ public class RegistrationServer extends CoapServer {
         coapHandler.checkTemperature();
     }
 
+    public void showTempThreshold() {
+        coapHandler.showTempThreshold();
+    }
+
+    public void editTempThreshold(float new_th) {
+        coapHandler.editTempThreshold(new_th);
+    }
+
+    public void listOnlineDevices() {
+        coapHandler.printTempSensor();
+        coapHandler.printCoolerActuator();
+        System.out.println();
+    }
+
     class RegistrationResource extends CoapResource {
 
         public RegistrationResource() {
@@ -80,8 +94,8 @@ public class RegistrationServer extends CoapServer {
 
             if (deviceName.equals("temperature_sensor")) {
                 success = coapHandler.deleteTemperatureSensor();
-            } else {
-                /* other devices */
+            } else if(deviceName.equals("cooler_actuator")){
+                success = coapHandler.deleteCoolerActuator();
             }
             
             if (success) {

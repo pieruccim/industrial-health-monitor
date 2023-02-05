@@ -9,9 +9,12 @@ public class HealthDataCollector {
 
     private static void printCommandList(){
         System.out.println("\nIndustrial Health monitor command list:");
-        System.out.println("\t-!help\t return a list of possible commands");
-        System.out.println("\t-!checkTemp\t get current machine temperature");
-        System.out.println("\t-!exit\t close the program");
+        System.out.println("\t-!help\t\t\t return a list of possible commands");
+        System.out.println("\t-!checkTemp\t\t get current machine temperature");
+        System.out.println("\t-!showCritTemp\t\t show critical temperature threshold");
+        System.out.println("\t-!editCritTemp new_value\t edit critical temperature threshold");
+        System.out.println("\t-!devList\t return a list of online devices");
+        System.out.println("\t-!exit\t\t\t close the program");
         System.out.println("\n");
     }
 
@@ -44,9 +47,36 @@ public class HealthDataCollector {
                 else if (tokens[0].equals("!checkTemp")){
 
                     rs.checkTemperature();
+                } else if (tokens[0].equals("!showCritTemp")) {
+                    
+
+                    rs.showTempThreshold();
+                }
+                else if (tokens[0].equals("!editCritTemp")) {
+                    
+                    if (tokens.length == 2) {
+
+                        float new_th;
+                        try {
+                            new_th = Float.parseFloat(tokens[1]);
+                        } catch (Exception e) {
+                            System.out.println("\nNot parsable parameter error: new threshold value is not numerical!\n");
+                            continue;
+                        }
+                        
+                        rs.editTempThreshold(new_th);
+                        System.out.println("\nCritical temperature threshold correctly updated!\n");
+
+                    } else {
+                        System.out.println("\nError: wrong command parameters!\n");
+                    }
+                    
+                }
+                else if(tokens[0].equals("!devList")){
+                    rs.listOnlineDevices();
                 }
                 else if (tokens[0].equals("!exit")){
-                    
+
                     System.exit(1);
                 } else {
                     throw new IOException();

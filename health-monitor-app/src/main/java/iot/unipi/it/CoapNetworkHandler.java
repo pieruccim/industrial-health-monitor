@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class CoapNetworkHandler {
 
     private float temp_threshold = 90;
+    private boolean cooler_enabled = false;
     
     private CoapClient clientTempSensor;
     private CoapClient clientCoolerActuator;
@@ -32,7 +33,7 @@ public class CoapNetworkHandler {
         }
 
         clientTempSensor = new CoapClient("coap://[" + ipAddress + "]/temperature_sensor");
-        System.out.println("Temperature sensor with ip-address [" + ipAddress + "] is now registered to the Coap net\n");
+        System.out.print("Temperature sensor with ip-address [" + ipAddress + "] is now registered to the Coap net\n" + "> ");
 
         observeSensor = clientTempSensor.observe(
                 new CoapHandler() {
@@ -56,7 +57,7 @@ public class CoapNetworkHandler {
         }
 
         clientCoolerActuator = new CoapClient("coap://[" + ipAddress + "]/cooler_actuator");
-        System.out.println("Cooler actuator with ip-address [" + ipAddress + "] is now registered to the Coap net\n");
+        System.out.print("Cooler actuator with ip-address [" + ipAddress + "] is now registered to the Coap net\n" + "> ");
     }
 
     public void checkTemperature() {
@@ -84,12 +85,31 @@ public class CoapNetworkHandler {
 
             if (res.getOptions().hasObserve()) {
                 /* notification received */
+
                 //System.out.format("\nNotification: temperature %.2f C need to be stored to DB\n", temp_value);
-                // TODO : save to DB the temperature notified and trigger actuator with a if condition
+
+                /* activate or deactivate the cooler if sensed temperature is above or below temperature threshold */
+                if (temp_value > temp_threshold && !cooler_enabled) {
+                    
+                    System.out.print("Temperature above threshold: activating cooler...\n" + "> ");
+
+                    triggerCoolerActuator("activate");
+                    cooler_enabled = true;
+
+                } else if(temp_value <= temp_threshold && cooler_enabled){
+
+                    System.out.print("Temperature below threshold: deactivating cooler...\n" + "> ");
+
+                    triggerCoolerActuator("deactivate");
+                    cooler_enabled = false;
+
+                }
+
+                /* TODO: save temperature data to DB */
 
             } else{
                 /* response to the get request received */
-                System.out.format("\nCurrent machine temperature is %.2f C\n", temp_value);
+                System.out.format("\nCurrent machine temperature is %.2f C\n\n", temp_value);
             }
 
         } catch (Exception e) {
@@ -118,8 +138,36 @@ public class CoapNetworkHandler {
             }, payload, MediaTypeRegistry.TEXT_PLAIN);
 
         } else{
-            System.out.println("There is no ripening notifier associated");
+            System.out.println("Error: no cooler actuator registered!");
         }
+    }
+
+    public void showTempThreshold() {
+        System.out.format("\nCritical temperature threshold is set to %.2f C\n\n", temp_threshold);
+    }
+
+    public void editTempThreshold(float new_th) {
+        temp_threshold = new_th;
+    }
+
+    public void printTempSensor() {
+        if(clientTempSensor != null){
+            System.out.println("\t- [temperature]\t" + clientTempSensor.getURI());
+        } else{
+            System.out.println("\t- [temperature]\t" + "Offline");
+        }
+    }
+
+    public void printCoolerActuator() {
+        if(clientCoolerActuator != null){
+            System.out.println("\t- [cooler]\t" + clientCoolerActuator.getURI());
+        } else{
+            System.out.println("\t- [cooler]\t" + "Offline");
+        }
+    }
+
+    public void cutAllConnection() {
+        observeSensor.proactiveCancel();
     }
 
     public boolean deleteTemperatureSensor() {
@@ -127,6 +175,14 @@ public class CoapNetworkHandler {
             return false;
         }
         clientTempSensor = null;
+        return true;
+    }
+
+    public boolean deleteCoolerActuator(){
+        if (clientCoolerActuator == null) {
+            return false;
+        }
+        clientCoolerActuator = null;
         return true;
     }
 }
