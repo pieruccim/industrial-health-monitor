@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "project-conf.h"
 #include "coap-engine.h"
 
 static float temp_value = 70.0;
