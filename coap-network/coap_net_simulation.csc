@@ -22,7 +22,7 @@
     </events>
     <motetype>
       org.contikios.cooja.contikimote.ContikiMoteType
-      <identifier>mtype553</identifier>
+      <identifier>mtype280</identifier>
       <description>BorderRouter</description>
       <source>[CONTIKI_DIR]/examples/rpl-border-router/border-router.c</source>
       <commands>make border-router.cooja TARGET=cooja</commands>
@@ -47,7 +47,7 @@
     </motetype>
     <motetype>
       org.contikios.cooja.contikimote.ContikiMoteType
-      <identifier>mtype12</identifier>
+      <identifier>mtype245</identifier>
       <description>TemperatureSensors</description>
       <source>[CONTIKI_DIR]/examples/industrial-health-monitor/coap-network/temperature/temperature_server.c</source>
       <commands>make temperature_server.cooja TARGET=cooja</commands>
@@ -70,11 +70,36 @@
       <moteinterface>org.contikios.cooja.interfaces.MoteAttributes</moteinterface>
       <symbols>false</symbols>
     </motetype>
+    <motetype>
+      org.contikios.cooja.contikimote.ContikiMoteType
+      <identifier>mtype379</identifier>
+      <description>CoolerActuator</description>
+      <source>[CONTIKI_DIR]/examples/industrial-health-monitor/coap-network/cooler/cooler_server.c</source>
+      <commands>make cooler_server.cooja TARGET=cooja</commands>
+      <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.Battery</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiVib</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiMoteID</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiRS232</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiBeeper</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiIPAddress</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiRadio</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiButton</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiPIR</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiClock</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiLED</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiCFS</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiEEPROM</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.Mote2MoteRelations</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.MoteAttributes</moteinterface>
+      <symbols>false</symbols>
+    </motetype>
     <mote>
       <interface_config>
         org.contikios.cooja.interfaces.Position
-        <x>83.98743678968337</x>
-        <y>29.39474900537189</y>
+        <x>82.32637938338556</x>
+        <y>34.377921224265336</y>
         <z>0.0</z>
       </interface_config>
       <interface_config>
@@ -89,13 +114,13 @@
         org.contikios.cooja.contikimote.interfaces.ContikiEEPROM
         <eeprom>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</eeprom>
       </interface_config>
-      <motetype_identifier>mtype553</motetype_identifier>
+      <motetype_identifier>mtype280</motetype_identifier>
     </mote>
     <mote>
       <interface_config>
         org.contikios.cooja.interfaces.Position
-        <x>67.73263057024032</x>
-        <y>66.25289112434845</y>
+        <x>77.28371065645277</x>
+        <y>72.27422422217805</y>
         <z>0.0</z>
       </interface_config>
       <interface_config>
@@ -110,7 +135,28 @@
         org.contikios.cooja.contikimote.interfaces.ContikiEEPROM
         <eeprom>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</eeprom>
       </interface_config>
-      <motetype_identifier>mtype12</motetype_identifier>
+      <motetype_identifier>mtype245</motetype_identifier>
+    </mote>
+    <mote>
+      <interface_config>
+        org.contikios.cooja.interfaces.Position
+        <x>51.159997486389784</x>
+        <y>61.943486106871596</y>
+        <z>0.0</z>
+      </interface_config>
+      <interface_config>
+        org.contikios.cooja.contikimote.interfaces.ContikiMoteID
+        <id>3</id>
+      </interface_config>
+      <interface_config>
+        org.contikios.cooja.contikimote.interfaces.ContikiRadio
+        <bitrate>250.0</bitrate>
+      </interface_config>
+      <interface_config>
+        org.contikios.cooja.contikimote.interfaces.ContikiEEPROM
+        <eeprom>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</eeprom>
+      </interface_config>
+      <motetype_identifier>mtype379</motetype_identifier>
     </mote>
   </simulation>
   <plugin>
@@ -131,7 +177,7 @@
       <skin>org.contikios.cooja.plugins.skins.UDGMVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.LEDVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.AddressVisualizerSkin</skin>
-      <viewport>2.3555316865611178 0.0 0.0 2.3555316865611178 49.853442206368584 189.61939275521465</viewport>
+      <viewport>4.816209222913304 0.0 0.0 4.816209222913304 -119.555641188228 57.02714149056116</viewport>
     </plugin_config>
     <width>400</width>
     <z>2</z>
@@ -147,7 +193,7 @@
       <coloring />
     </plugin_config>
     <width>1253</width>
-    <z>3</z>
+    <z>1</z>
     <height>654</height>
     <location_x>400</location_x>
     <location_y>160</location_y>
@@ -157,13 +203,14 @@
     <plugin_config>
       <mote>0</mote>
       <mote>1</mote>
+      <mote>2</mote>
       <showRadioRXTX />
       <showRadioHW />
       <showLEDs />
       <zoomfactor>500.0</zoomfactor>
     </plugin_config>
     <width>1653</width>
-    <z>5</z>
+    <z>7</z>
     <height>308</height>
     <location_x>0</location_x>
     <location_y>814</location_y>
@@ -177,8 +224,8 @@
     <width>973</width>
     <z>6</z>
     <height>160</height>
-    <location_x>680</location_x>
-    <location_y>0</location_y>
+    <location_x>681</location_x>
+    <location_y>3</location_y>
   </plugin>
   <plugin>
     org.contikios.cooja.serialsocket.SerialSocketServer
@@ -188,10 +235,10 @@
       <bound>true</bound>
     </plugin_config>
     <width>362</width>
-    <z>4</z>
+    <z>5</z>
     <height>116</height>
-    <location_x>1202</location_x>
-    <location_y>29</location_y>
+    <location_x>1284</location_x>
+    <location_y>42</location_y>
   </plugin>
   <plugin>
     org.contikios.cooja.plugins.MoteInterfaceViewer
@@ -200,11 +247,24 @@
       <interface>LEDs</interface>
       <scrollpos>0,0</scrollpos>
     </plugin_config>
-    <width>370</width>
-    <z>1</z>
-    <height>117</height>
-    <location_x>769</location_x>
-    <location_y>19</location_y>
+    <width>314</width>
+    <z>3</z>
+    <height>132</height>
+    <location_x>688</location_x>
+    <location_y>36</location_y>
+  </plugin>
+  <plugin>
+    org.contikios.cooja.plugins.MoteInterfaceViewer
+    <mote_arg>2</mote_arg>
+    <plugin_config>
+      <interface>LEDs</interface>
+      <scrollpos>0,0</scrollpos>
+    </plugin_config>
+    <width>290</width>
+    <z>4</z>
+    <height>124</height>
+    <location_x>1002</location_x>
+    <location_y>37</location_y>
   </plugin>
 </simconf>
 
