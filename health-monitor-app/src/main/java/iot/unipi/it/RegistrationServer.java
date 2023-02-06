@@ -9,6 +9,7 @@ import org.eclipse.californium.core.server.resources.CoapExchange;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
+import java.sql.*;
 
 
 public class RegistrationServer extends CoapServer {
@@ -36,6 +37,10 @@ public class RegistrationServer extends CoapServer {
         coapHandler.printTempSensor();
         coapHandler.printCoolerActuator();
         System.out.println();
+    }
+
+    public void printStoredData(String sensor_type){
+        sensorDB.readData( sensor_type, 10);      
     }
 
     class RegistrationResource extends CoapResource {

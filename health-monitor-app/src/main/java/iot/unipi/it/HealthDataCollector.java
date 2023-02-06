@@ -8,13 +8,14 @@ import java.net.SocketException;
 public class HealthDataCollector {
 
     private static void printCommandList(){
-        System.out.println("\nIndustrial Health monitor command list:");
-        System.out.println("\t-!help\t\t\t return a list of possible commands");
-        System.out.println("\t-!checkTemp\t\t get current machine temperature");
-        System.out.println("\t-!showCritTemp\t\t show critical temperature threshold");
-        System.out.println("\t-!editCritTemp new_value\t edit critical temperature threshold");
-        System.out.println("\t-!devList\t return a list of online devices");
-        System.out.println("\t-!exit\t\t\t close the program");
+        System.out.println("\nIndustrial Health monitor command list:\n");
+        System.out.println("\t!help\t\t\t\t return a list of possible commands");
+        System.out.println("\t!checkTemp\t\t\t get current machine temperature");
+        System.out.println("\t!showCritTemp\t\t\t show critical temperature threshold");
+        System.out.println("\t!editCritTemp new_value\t edit critical temperature threshold");
+        System.out.println("\t!devList\t\t\t return a list of online devices");
+        System.out.println("\t!readData sensor_type\t\t display latest sensor data");
+        System.out.println("\t!exit\t\t\t\t close the program");
         System.out.println("\n");
     }
 
@@ -74,6 +75,26 @@ public class HealthDataCollector {
                 }
                 else if(tokens[0].equals("!devList")){
                     rs.listOnlineDevices();
+                }
+                else if(tokens[0].equals("!readData")){
+
+                    if (tokens.length == 2) {
+
+                        String sensor_type = tokens[1];
+                        
+                        if (sensor_type.equals("temperature") || sensor_type.equals("vibration")) {
+
+                            rs.printStoredData(sensor_type);
+                        } else{
+
+                            System.out.println("\nIncorrect parameter error: sensor type is not corect!\n");
+                        }
+                        
+
+                    } else {
+                        System.out.println("\nError: wrong command parameters!\n");
+                    }
+                
                 }
                 else if (tokens[0].equals("!exit")){
 

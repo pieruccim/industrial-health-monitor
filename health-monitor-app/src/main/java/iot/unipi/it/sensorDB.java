@@ -32,6 +32,39 @@ public class sensorDB {
         return dbConnection;
     }
 
+    public static ResultSet readData(String table, int count){
+
+        ResultSet resSet = null;
+        String readQuery = "SELECT * FROM " + table + " ORDER BY timestamp DESC LIMIT " + count;
+
+        try (
+            Connection conn = makeConnection();
+            PreparedStatement statement = conn.prepareStatement(readQuery);
+        ) {
+
+            resSet = statement.executeQuery(readQuery);
+
+            ResultSetMetaData rsmd = resSet.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+
+            System.out.println("\tid\t\ttimestamp\t" + table);
+
+            while (resSet.next()) {
+                for (int i = 1; i <= columnCount; i++) {
+                    System.out.print("\t" + resSet.getString(i));
+                }
+                System.out.println();
+            }
+
+            System.out.println();
+
+        } catch (SQLException sqle) {
+
+            sqle.printStackTrace();
+        } 
+        return resSet;
+    }
+
     public static void insertTemperatureRecord(float temperature_value){
 
         String insertQuery = "INSERT INTO temperature(temp_value) values (?)";
@@ -46,10 +79,11 @@ public class sensorDB {
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                System.out.println("Temperature record correctly inserted to DB!");
+                //System.out.println("Temperature record correctly inserted to DB!");
             }
             
         } catch (SQLException sqle) {
+            
             sqle.printStackTrace();
         }
     }
