@@ -47,7 +47,7 @@ public class sensorDB {
             ResultSetMetaData rsmd = resSet.getMetaData();
             int columnCount = rsmd.getColumnCount();
 
-            System.out.println("\tid\t\ttimestamp\t" + table);
+            System.out.println("\tid\ttimestamp\t\t" + table + "\t\tunit");
 
             while (resSet.next()) {
                 for (int i = 1; i <= columnCount; i++) {
