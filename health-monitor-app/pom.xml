@@ -17,21 +17,31 @@
 	</repository>
   </repositories>
   <dependencies>
+	
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>8.0.25</version>
+	</dependency>
+
 	<dependency>
 		<groupId>org.eclipse.californium</groupId>
 		<artifactId>californium-core</artifactId>
 		<version>1.1.0-SNAPSHOT</version>
 	</dependency>
+
     <dependency>
 	  	<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-compiler-plugin</artifactId>
 		<version>3.8.1</version>
     </dependency>
+
 	<dependency>
 		<groupId>org.json</groupId>
 		<artifactId>json</artifactId>
 		<version>20090211</version>
 	</dependency>
+	
   </dependencies>
 
 <build>

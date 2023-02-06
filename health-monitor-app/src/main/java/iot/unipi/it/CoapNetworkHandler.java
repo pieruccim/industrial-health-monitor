@@ -105,7 +105,8 @@ public class CoapNetworkHandler {
 
                 }
 
-                /* TODO: save temperature data to DB */
+                /* save temperature data to DB (only when notification data arrives) */
+                sensorDB.insertTemperatureRecord(temp_value);
 
             } else{
                 /* response to the get request received */
