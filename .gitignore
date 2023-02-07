@@ -2,4 +2,5 @@
 .vscode/
 coap-network/cooler/build/
 coap-network/temperature/build/
+mqtt-network/build/
 health-monitor-app/target/
