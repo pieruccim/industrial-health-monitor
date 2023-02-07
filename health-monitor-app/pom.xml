@@ -10,12 +10,20 @@
 	<name>industrial-health-monitor</name>
   
   <repositories>
+
 	<repository>
 		<id>repo.eclipse.org</id>
 		<name>Californium Repository</name>
 		<url>https://repo.eclipse.org/content/repositories/californium/</url>
 	</repository>
+
+	<repository>
+			<id>Eclipse Paho Repo</id>
+			<url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+	</repository>
+
   </repositories>
+
   <dependencies>
 	
 	<dependency>
@@ -40,6 +48,12 @@
 		<groupId>org.json</groupId>
 		<artifactId>json</artifactId>
 		<version>20090211</version>
+	</dependency>
+
+	<dependency>
+			<groupId>org.eclipse.paho</groupId>
+			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+			<version>1.2.0</version>
 	</dependency>
 	
   </dependencies>

@@ -26,6 +26,8 @@ public class HealthDataCollector {
         RegistrationServer rs = new RegistrationServer();
         rs.start();
 
+        MqttClientManager cm = new MqttClientManager(); 
+
         // buffer to receive input from command line
         BufferedReader buf = new BufferedReader(new InputStreamReader(System.in));
 
