@@ -106,7 +106,6 @@ pub_handler(const char *topic, uint16_t topic_len, const uint8_t *chunk,
 static void simulate_vibration_sensor(){
 
     /* Vibration vary randomly of a value in range [-10.0; 10.0] */
-
     float coeff = 10;
 
     srand(time(NULL));
@@ -118,6 +117,14 @@ static void simulate_vibration_sensor(){
         vibration_value -= variation;
     }
 
+    if (vibration_value < MIN_VIBRATION){
+
+        vibration_value = MIN_VIBRATION;
+    } else if (vibration_value > MAX_VIBRATION){
+
+         vibration_value = MAX_VIBRATION;
+    }
+    
 }
 
 
