@@ -48,7 +48,27 @@ public class MqttClientManager implements MqttCallback{
 
     @Override
     public void connectionLost(Throwable cause) {
-        // TODO Auto-generated method stub need to be completed
+        
+        System.out.println("Connection lost, attempting to reconnect...");
+        int reconnWindow = 3000;
+
+        while(!client.isConnected()){
+            try{
+                System.out.println("Reconnecting in " + reconnWindow/1000 + " seconds");
+                Thread.sleep(reconnWindow);
+
+                System.out.println("Reconnecting . . .");
+                client.connect();
+                reconnWindow *= 2;
+
+                //Now we can subscribe to the topics
+                client.subscribe(vibrationSubTopic);
+                System.out.printf("Resubscribed to %s topic!\n", vibrationSubTopic);
+
+            }catch(MqttException | InterruptedException mqtte){
+                System.out.println("Error during the reconnection " + throwable.getCause().getMessage());
+            }
+        }
         
     }
 
