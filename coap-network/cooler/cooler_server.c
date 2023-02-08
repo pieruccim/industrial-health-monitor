@@ -48,6 +48,7 @@ static void check_router_reachable(){
     } else{
         
         LOG_INFO("Border router is reachable!\n");
+        leds_on(LEDS_NUM_TO_MASK(LEDS_LED2)); // yellow led on cooja
         connected = true;
 
     }   
@@ -66,7 +67,7 @@ void cooler_chunck_handler(coap_message_t *response){
     LOG_INFO("Response received: %.*s\n", len, (char *)chunk);
 
     if( strcmp((char *) chunk, "reg_completed") == 0){
-        leds_on(LEDS_NUM_TO_MASK(LEDS_RED));
+        leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
         registered = true;
     } else{
         etimer_set(&wait_registration, CLOCK_SECOND * REGISTRATION_TRY_INTERVAL);
