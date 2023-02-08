@@ -67,6 +67,8 @@ public class sensorDB {
 
     public static void insertTemperatureRecord(float temperature_value){
 
+        /* store temperature data to DB*/
+
         String insertQuery = "INSERT INTO temperature(temp_value) values (?)";
 
         try (
@@ -88,8 +90,31 @@ public class sensorDB {
         }
     }
 
-    public static void insertVibration(){
-        // TODO: implement funtion to store vibration data to DB
+    public static void insertVibrationRecord(float vibration_value, String unit){
+        
+        /* store vibration data to DB*/
+
+        String insertQuery = "INSERT INTO vibration(vibr_value, unit) values (?, ?)";
+
+        try (
+            Connection conn = makeConnection();
+            PreparedStatement statement = conn.prepareStatement(insertQuery);
+        ) {
+
+            /* insert value into query */
+            statement.setFloat(1, vibration_value);
+            statement.setString(2, unit);
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                //System.out.println("Vibration record correctly inserted to DB!");
+            }
+            
+        } catch (SQLException sqle) {
+            
+            sqle.printStackTrace();
+        }
+
     }
 
 }

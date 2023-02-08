@@ -1,14 +1,24 @@
 package iot.unipi.it;
 
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class MqttClientManager {
+import org.json.JSONObject;
 
-    private final String broker = "tcp://127.0.0.1:1884";
+public class MqttClientManager implements MqttCallback{
+
+    private final String broker = "tcp://127.0.0.1:1883";
     private final String clientID = "MqttManager";
     private MqttClient client = null;
 
     private final String vibrationSubTopic = "vibration";
+
+    private float current_vibration = 0;
 
     public MqttClientManager() {
 
@@ -34,6 +44,56 @@ public class MqttClientManager {
             
         } while (!this.client.isConnected());
 
+    }
+
+    @Override
+    public void connectionLost(Throwable cause) {
+        // TODO Auto-generated method stub need to be completed
+        
+    }
+
+    @Override
+    public void messageArrived(String topic, MqttMessage message) throws Exception {
+        
+        byte[] payload = message.getPayload();
+        
+        JSONObject jsonMessage = new JSONObject(new String(payload));
+
+        if (topic.equals(this.vibrationSubTopic)) {
+            
+            if (jsonMessage.has("vibration")) {
+                
+                /* parsing vibration data from JSON */
+                this.current_vibration = (float) jsonMessage.getDouble("vibration");
+                String unit = jsonMessage.getString("unit");
+
+                /* storing vibration data to DB */
+                sensorDB.insertVibrationRecord(this.current_vibration, unit);
+            }
+
+        } else{
+            System.out.print("JSON data received is not valid!");
+        }
+
+    }
+
+    @Override
+    public void deliveryComplete(IMqttDeliveryToken token) {
+        
+        System.out.println("Delivery completed!");
+        
+    }
+
+    public void checkVibration() {
+
+        if (client.isConnected()) {
+
+            System.out.format("\nCurrent machine vibration is %.1f Hz\n\n", current_vibration);
+        } else{
+
+            System.out.println("\nVibration sensor is not connected!\n");
+        }
+       
     }
     
 }

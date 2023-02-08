@@ -12,9 +12,10 @@ public class HealthDataCollector {
         System.out.println("\t!help\t\t\t\t return a list of possible commands");
         System.out.println("\t!checkTemp\t\t\t get current machine temperature");
         System.out.println("\t!showCritTemp\t\t\t show critical temperature threshold");
-        System.out.println("\t!editCritTemp new_value\t edit critical temperature threshold");
-        System.out.println("\t!devList\t\t\t return a list of online devices");
-        System.out.println("\t!readData sensor_type\t\t display latest sensor data");
+        System.out.println("\t!editCritTemp <new_value>\t edit critical temperature threshold");
+        System.out.println("\t!checkVibr\t\t\t get current machine vibration");
+        System.out.println("\t!devList\t\t\t return a list of registered devices");
+        System.out.println("\t!readData <sensor_type>\t\t display latest sensor data");
         System.out.println("\t!exit\t\t\t\t close the program");
         System.out.println("\n");
     }
@@ -74,6 +75,9 @@ public class HealthDataCollector {
                         System.out.println("\nError: wrong command parameters!\n");
                     }
                     
+                }
+                else if (tokens[0].equals("!checkVibr")) {
+                    cm.checkVibration();
                 }
                 else if(tokens[0].equals("!devList")){
                     rs.listOnlineDevices();
