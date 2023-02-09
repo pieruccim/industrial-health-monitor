@@ -94,6 +94,7 @@ public class CoapNetworkHandler {
                     System.out.print("Temperature above threshold: activating cooler...\n" + "> ");
 
                     triggerCoolerActuator("activate");
+                    notifyTempSensor("activate");
                     cooler_enabled = true;
 
                 } else if(temp_value <= temp_threshold && cooler_enabled){
@@ -101,6 +102,7 @@ public class CoapNetworkHandler {
                     System.out.print("Temperature below threshold: deactivating cooler...\n" + "> ");
 
                     triggerCoolerActuator("deactivate");
+                    notifyTempSensor("deactivate");
                     cooler_enabled = false;
 
                 }
@@ -140,6 +142,30 @@ public class CoapNetworkHandler {
 
         } else{
             System.out.println("Error: no cooler actuator registered!");
+        }
+    }
+
+    private void notifyTempSensor(String payload){
+
+        if(clientTempSensor != null){
+
+            clientTempSensor.put(new CoapHandler() {
+                
+                public void onLoad(CoapResponse response) {
+                    if (response != null) {
+                        if(!response.isSuccess())
+                            System.out.println("Error with temperature sensor!\n");
+                    }
+                }
+
+                public void onError() {
+                    System.err.println("Error with temperature PUT request!\n");
+                }
+
+            }, payload, MediaTypeRegistry.TEXT_PLAIN);
+
+        } else{
+            System.out.println("Error: no temperature sensor registered!");
         }
     }
 
