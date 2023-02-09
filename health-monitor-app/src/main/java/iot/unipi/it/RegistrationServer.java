@@ -110,4 +110,12 @@ public class RegistrationServer extends CoapServer {
             }
         }
     }
+
+    public void exit() {
+
+        /* release resources */
+        coapHandler.deleteCoolerActuator();
+        coapHandler.cutAllConnection();
+        coapHandler.deleteTemperatureSensor();
+    }
 }

@@ -194,7 +194,9 @@ public class CoapNetworkHandler {
     }
 
     public void cutAllConnection() {
-        observeSensor.proactiveCancel();
+        if (observeSensor != null) {
+            observeSensor.proactiveCancel();
+        }
     }
 
     public boolean deleteTemperatureSensor() {

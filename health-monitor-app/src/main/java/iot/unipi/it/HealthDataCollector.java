@@ -103,8 +103,10 @@ public class HealthDataCollector {
                 
                 }
                 else if (tokens[0].equals("!exit")){
-
+                    
+                    rs.exit();
                     System.exit(1);
+                    
                 } else {
                     throw new IOException();
                 }
