@@ -17,7 +17,7 @@
 #include <strings.h>
 #include <time.h>
 /*---------------------------------------------------------------------------*/
-#define LOG_MODULE "mqtt-vibration-client"
+#define LOG_MODULE "vibration-sensor"
 #ifdef MQTT_CLIENT_CONF_LOG_LEVEL
 #define LOG_LEVEL MQTT_CLIENT_CONF_LOG_LEVEL
 #else
@@ -38,8 +38,8 @@ static const char *broker_ip = MQTT_CLIENT_BROKER_IP_ADDR;
 /* Various states */
 static uint8_t state;
 
-#define STATE_INIT    		  0
-#define STATE_NET_OK    	  1
+#define STATE_INIT    		    0
+#define STATE_NET_OK    	    1
 #define STATE_CONNECTING      2
 #define STATE_CONNECTED       3
 #define STATE_SUBSCRIBED      4
@@ -61,6 +61,7 @@ AUTOSTART_PROCESSES(&mqtt_vibration_client);
 static char client_id[BUFFER_SIZE];
 static char pub_topic[BUFFER_SIZE];
 static char broker_address[CONFIG_IP_ADDR_STR_LEN];
+static char fractional_part[10];
 
 // At the beginning vibration is 50 Hz
 
@@ -96,20 +97,22 @@ static void
 pub_handler(const char *topic, uint16_t topic_len, const uint8_t *chunk,
             uint16_t chunk_len)
 {
-  printf("Pub Handler: topic='%s' (len=%u), chunk_len=%u\n", topic,
+  LOG_INFO("Pub Handler: topic='%s' (len=%u), chunk_len=%u\n", topic,
           topic_len, chunk_len);
   return;
 }
 /*---------------------------------------------------------------------------*/
 
 
-static void simulate_vibration_sensor(){
+static void simulate_vibration_sensor(unsigned int i){
 
     /* Vibration vary randomly of a value in range [-10.0; 10.0] */
     float coeff = 10;
 
-    srand(time(NULL));
+    srand(i);
     float variation = ((float)rand() / (float)(RAND_MAX) * coeff);
+
+    srand(i);
 
     if(rand() % 2 == 0){
         vibration_value += variation;
@@ -117,12 +120,12 @@ static void simulate_vibration_sensor(){
         vibration_value -= variation;
     }
 
-    if (vibration_value < MIN_VIBRATION){
+    if (vibration_value < 0.1){
 
-        vibration_value = MIN_VIBRATION;
-    } else if (vibration_value > MAX_VIBRATION){
+        vibration_value = 0.1;
+    } else if (vibration_value > 150.1){
 
-         vibration_value = MAX_VIBRATION;
+         vibration_value = 150.1;
     }
     
 }
@@ -133,13 +136,13 @@ mqtt_event(struct mqtt_connection *m, mqtt_event_t event, void *data)
 {
   switch(event) {
   case MQTT_EVENT_CONNECTED: {
-    printf("Application has a MQTT connection\n");
+    LOG_INFO("Application has a MQTT connection\n");
 
     state = STATE_CONNECTED;
     break;
   }
   case MQTT_EVENT_DISCONNECTED: {
-    printf("MQTT Disconnect. Reason %u\n", *((mqtt_event_t *)data));
+    LOG_INFO("MQTT Disconnect. Reason %u\n", *((mqtt_event_t *)data));
 
     state = STATE_DISCONNECTED;
     process_poll(&mqtt_vibration_client);
@@ -157,25 +160,25 @@ mqtt_event(struct mqtt_connection *m, mqtt_event_t event, void *data)
     mqtt_suback_event_t *suback_event = (mqtt_suback_event_t *)data;
 
     if(suback_event->success) {
-      printf("Application is subscribed to topic successfully\n");
+      LOG_INFO("Application is subscribed to topic successfully\n");
     } else {
-      printf("Application failed to subscribe to topic (ret code %x)\n", suback_event->return_code);
+      LOG_INFO("Application failed to subscribe to topic (ret code %x)\n", suback_event->return_code);
     }
 #else
-    printf("Application is subscribed to topic successfully\n");
+    LOG_INFO("Application is subscribed to topic successfully\n");
 #endif
     break;
   }
   case MQTT_EVENT_UNSUBACK: {
-    printf("Application is unsubscribed to topic successfully\n");
+    LOG_INFO("Application is unsubscribed to topic successfully\n");
     break;
   }
   case MQTT_EVENT_PUBACK: {
-    //printf("Publishing complete.\n");
+    //LOG_INFO("Publishing complete.\n");
     break;
   }
   default:
-    printf("Application got a unhandled MQTT event: %i\n", event);
+    LOG_INFO("Application got a unhandled MQTT event: %i\n", event);
     break;
   }
 }
@@ -196,7 +199,7 @@ PROCESS_THREAD(mqtt_vibration_client, ev, data)
 
   PROCESS_BEGIN();
   
-  printf("MQTT Vibration Client process\n");
+  LOG_INFO("MQTT Vibration Client process\n");
 
   // Initialize the ClientID as MAC address
   snprintf(client_id, BUFFER_SIZE, "%02x%02x%02x%02x%02x%02x",
@@ -227,7 +230,7 @@ PROCESS_THREAD(mqtt_vibration_client, ev, data)
         if(state == STATE_NET_OK){
 
             // Connect to MQTT server
-            printf("Connecting...\n");
+            LOG_INFO("Connecting...\n");
             
             memcpy(broker_address, broker_ip, strlen(broker_ip));
             mqtt_connect(&conn, broker_address, DEFAULT_BROKER_PORT,(DEFAULT_PUBLISH_INTERVAL * 3) / CLOCK_SECOND, MQTT_CLEAN_SESSION_ON);
@@ -240,10 +243,11 @@ PROCESS_THREAD(mqtt_vibration_client, ev, data)
             // Publish something
             sprintf(pub_topic, "%s", "vibration");
             
-            simulate_vibration_sensor();
+            simulate_vibration_sensor(clock_seconds());
 
-            sprintf(app_buffer, "{\"vibration\": %f, \"unit\": %s}", vibration_value, "Hz");
-            printf("Publishing payload: %s\n", app_buffer);
+            sprintf(fractional_part, "%d", (int)((vibration_value - (int)vibration_value)*10));
+            sprintf(app_buffer, "{\"vibration\": %d.%s, \"unit\": %s}", (int)vibration_value, fractional_part, "Hz");
+            LOG_INFO("Publishing payload: %s\n", app_buffer);
 
             mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_1, MQTT_RETAIN_OFF);
 

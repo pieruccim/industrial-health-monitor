@@ -15,13 +15,13 @@
 #include "coap-blocking-api.h"
 
 #include "sys/log.h"
-#define LOG_MODULE "App"
+#define LOG_MODULE "temp-sensor"
 #define LOG_LEVEL LOG_LEVEL_APP
 
 #define SERVER_EP "coap://[fd00::1]:5683"
 #define CONNECTION_TRY_INTERVAL 2
 #define REGISTRATION_TRY_INTERVAL 1
-#define SIMULATION_INTERVAL 5  
+#define SIMULATION_INTERVAL 2  
 
 #define SENSOR_NAME "temperature_sensor"
 

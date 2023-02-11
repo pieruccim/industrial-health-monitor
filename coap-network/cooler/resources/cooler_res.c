@@ -7,7 +7,7 @@
 #include "dev/leds.h"
 
 #include "sys/log.h"
-#define LOG_MODULE "App"
+#define LOG_MODULE "cooler-act"
 #define LOG_LEVEL LOG_LEVEL_APP
 
 static bool cooler_activated = false;

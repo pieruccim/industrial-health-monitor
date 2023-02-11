@@ -6,8 +6,11 @@
 #include "coap-engine.h"
 
 #include "sys/log.h"
-#define LOG_MODULE "App"
+#define LOG_MODULE "temp-sensor"
 #define LOG_LEVEL LOG_LEVEL_APP
+
+#define MAX_TEMP 100
+#define MIN_TEMP 20
 
 static float temp_value = 70.0;
 static bool cooler_activated = false;
@@ -51,7 +54,7 @@ void simulate_temp_sensor(){
 
     }
 
-    printf("Sensed temperature: %.2f C\n", temp_value);
+    LOG_INFO("Sensed temperature: %.2f C\n", temp_value);
     /* resource event is triggered, then temp_event_handler is called */
     temperature_sensor.trigger();
 }
@@ -61,7 +64,7 @@ static void get_temp_handler(coap_message_t *request, coap_message_t *response, 
     /* converting temperature from float to string*/
     snprintf((char *)buffer, COAP_MAX_CHUNK_SIZE, "{\"temp\":%.2f}", temp_value);
 
-    printf("payload: %s, length of payload: %d\n", buffer, strlen((char *)buffer));
+    LOG_INFO("Sending payload: %s, length of payload: %d\n", buffer, strlen((char *)buffer));
 
     coap_set_header_content_format(response, APPLICATION_JSON);
     coap_set_payload(response, buffer, strlen((char *)buffer));
